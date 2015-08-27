@@ -167,7 +167,7 @@ var server = net.createServer(function(c) { //'connection' listener
 		sneakarr.push(arrtron)
 	});
 	
-	//Socket Functions (e.g. what the crappy SIUI interface is doing)
+	//Socket Functions (e.g. what the SIUI interface is doing)
 	c.on('end', function() {
 		console.log('SIUI disconnected');
 	});
