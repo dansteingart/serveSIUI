@@ -1,6 +1,6 @@
 ##Overview
 
-This is a simple server that allows generalized control of the SIUI CTS909 via a websever.  The program can also intercept the connection between the PC software and 9009 box.  Nodejs is required.
+This is a simple server that allows generalized control of the SIUI CTS9009 via a websever.  The program can also intercept the connection between the PC software and 9009 box.  Nodejs is required.
 
 ##Installing
 Assuming you have nodejs, all that is required is in this repository.  
