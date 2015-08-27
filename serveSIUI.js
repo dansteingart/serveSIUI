@@ -19,8 +19,7 @@ http.listen(9600);
 //Enable Cross Site Scripting
 app.use(cors())
 
-//Allows us to rip out data?
-//app.use(bodyParser());
+
 
 //thanks http://blog.matthewdfuller.com/2014/10/nodejs-error-too-many-parameters-at.html
 app.use(bodyParser.urlencoded({
