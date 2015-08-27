@@ -35,4 +35,15 @@ returns the last full data stream from the SIUI.  Analysis of what this data mea
 where f.f is some float for the db setting.
 
 ###Send Command
-`http://SERVERADDY:PORT/setGain/f.f`
+`http://SERVERADDY:PORT/sendCmd/CMDNAME`
+
+will run a predefine command set into the SIUI.  How do get command sets?
+
+###Get Commands
+The SIUI CTS software sends a batch of parameters (outside of gains and freezes) to the SIUI CTS9009 at once.  I haven't reverse engineered the packet protocol yet, but if you connect the windows software to the serveSIUI server the server will save each parameter set as a file with a name like:
+
+`temp_1440698432627.scmd` 
+
+simply rename the commands (leaving the `.scmd` extension) and then run your new name as the CMDNAME in the above step.  Once you capture the parameter values you want you no longer have to run the windows software.  
+
+You're welcome.
