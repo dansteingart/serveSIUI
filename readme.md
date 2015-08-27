@@ -2,9 +2,8 @@
 
 This is a simple server that allows generalized control of the SIUI CTS909 via a websever.  The program can also intercept the connection between the PC software and 9009 box.  Nodejs is required.
 
-
 ##Installing
-Assuming you have nodejs, all tahat is required is in this respositoty
+Assuming you have nodejs, all that is required is in this repository.  
 
 ##Running
 
@@ -44,6 +43,6 @@ The SIUI CTS software sends a batch of parameters (outside of gains and freezes)
 
 `temp_1440698432627.scmd` 
 
-simply rename the commands (leaving the `.scmd` extension) and then run your new name as the CMDNAME in the above step.  Once you capture the parameter values you want you no longer have to run the windows software.  
+simply rename the commands (leaving the `.scmd` extension) and then run your new name as the cmd_name in the above step.  Once you capture the parameter values you want you no longer have to run the windows software.  
 
 You're welcome.
