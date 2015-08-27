@@ -6,6 +6,17 @@ var net = require('net');
 var fs = require('fs');
 
 
+parts = process.argv
+
+if (parts.length < 4)
+{
+	console.log("usage: node serveSIUI.js [HTTP PORT] [SIUI_IP]")
+	process.exit(1);
+}
+
+hp = parts[2]
+sp = parts[3]
+
 //set the bait
 rolling = ""
 test = [1,0,0,0,9,0,25,0,0] //001 000 000 000 009 000 025
@@ -13,7 +24,7 @@ bait = ""
 for (t in test) bait += test[t].toString()+","
 console.log(bait)
 
-http.listen(9600);
+http.listen(hp);
 
 
 //Enable Cross Site Scripting
@@ -149,7 +160,7 @@ var server = net.createServer(function(c) { //'connection' listener
 
 server.listen(6000, function() { //'listening' listener
 			console.log('server bound');
-			client.connect(6000, '192.168.22.250', function() {
+			client.connect(6000, sp, function() {
 				console.log('Connected');
 			});
 			
