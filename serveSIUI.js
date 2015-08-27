@@ -79,16 +79,33 @@ app.get('/sendbuffer/', function(req, res){
 
 });
 
-app.get('/sendcmd/*', function(req, res){
-	toSend = req.originalUrl.replace("/sendcmd/","")
+app.get('/sendCmd/*', function(req, res){
+	toSend = req.originalUrl.replace("/sendCmd/","")
 	console.log(toSend)
+	
+	try
+	{
 	fs.readFile(toSend+".scmd",function(err,inp)
 	{
+		try
+		{
 		arr = JSON.parse(inp)
 		for (var i = 0; i < arr.length; i++) client.write(new Buffer(arr[i]))
+		}
+		catch (e)
+		{
+		console.log("not a file probably");
+		}
 		res.send("sent buffer of length "+sneakarr.length)
+
 	});
-	
+	}
+	catch (e)
+	{
+		console.log("not a file probably");
+	}
+
+
 });
 
 app.get('/setGain/*', function(req, res){
