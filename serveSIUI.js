@@ -113,6 +113,7 @@ app.get('/setGain/*', function(req, res){
 	
 	b2 = Math.floor(toSend/255)
 	b1 = toSend%255 - b2
+	if (b1 < 0) b1 = 0;
 	console.log(toSend)
 	fs.readFile("000db.scmd",function(err,inp)
 	{
