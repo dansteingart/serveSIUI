@@ -47,11 +47,18 @@ app.use(bodyParser.json({
 
 app.post('/toSIUI',function(req,res){
 	x = req.body
-	toSend = x['data']
-	buf = new Buffer(toSend)
-	console.log(buf.length);
-	client.write(buf);
-	res.send(x);
+	data = x['data']
+	arr = data
+	try
+	{
+		for (var i = 0; i < arr.length; i++) client.write(new Buffer(arr[i]))
+	}
+		catch (e)
+	{
+		console.log("not a file probably");
+	}
+	res.send("sent buffer of length "+sneakarr.length)
+	
 	
 });
 
@@ -103,6 +110,41 @@ app.get('/sendCmd/*', function(req, res){
 	catch (e)
 	{
 		console.log("not a file probably");
+	}
+
+
+});
+
+
+app.get('/getBaseline/', function(req, res){
+	try
+	{
+		fs.readFile("baseline.scmd",function(err,inp)
+		{
+			res.send(inp)
+		});
+	}
+	catch (e)
+	{
+		console.log(e);
+		res.send("farted")
+	}
+
+
+});
+
+app.get('/getGainBaseline/', function(req, res){
+	try
+	{
+		fs.readFile("000db.scmd",function(err,inp)
+		{
+			res.send(inp)
+		});
+	}
+	catch (e)
+	{
+		console.log(e);
+		res.send("farted")
 	}
 
 
