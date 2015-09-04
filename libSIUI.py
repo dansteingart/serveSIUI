@@ -11,7 +11,7 @@ class SIUI():
         self.dec = {}
         self.dec['range'] = {'start': 28,'bytes': 4,'type':float32}
         self.dec['gain']  = {'start': 48,'bytes': 4,'type':int32}
-        self.dec['prf']   = {'start':184,'bytes': 2,'type':int16}
+        self.dec['prf']   = {'start':184,'bytes': 2,'type':int16} #SIUI was wrong here
         self.dec['delay'] = {'start': 44,'bytes': 4,'type':float32}
         self.dec['vel']   = {'start':168,'bytes': 4,'type':float32}
         self.dec['wave']  = {'start':400,'bytes':800,'type':uint16}
