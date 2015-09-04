@@ -11,7 +11,7 @@ class SIUI():
         self.dec = {}
         self.dec['range'] = {'start': 28,'bytes': 4,'type':float32}
         self.dec['gain']  = {'start': 48,'bytes': 4,'type':int32}
-        self.dec['prf']   = {'start':162,'bytes': 2,'type':uint16}
+        self.dec['prf']   = {'start':184,'bytes': 2,'type':int16}
         self.dec['delay'] = {'start': 44,'bytes': 4,'type':float32}
         self.dec['vel']   = {'start':168,'bytes': 4,'type':float32}
         self.dec['wave']  = {'start':400,'bytes':800,'type':uint16}
@@ -19,14 +19,14 @@ class SIUI():
         self.gbase = self.getGainBaseline()
         self.rects = ['pos','neg','full','filter','rf']
         self.volts = range(50,550,50)
-        self.freqs = ['1_4MHz','0.5_8MHz','2_15MHz','2_15MHz','4MHz','5MHz','10MHz','13MHz','15MHz']
-
+        self.freqs = ['1_4MHz','0.5_10MHz','2_20MHz','1MHz','2.5MHz','4MHz','5MHz','10MHz','13MHz','15MHz','20MHz']
         #defaults for param setting
         self.vset=50
         self.rng=30.0
         self.mode='PE'
         self.vel=5250
         self.pw = 200
+        self.prf = 200
         self.damp = 0
         self.rect = 'full'
         self.power = 0
@@ -155,6 +155,10 @@ class SIUI():
         for i in pack('f',self.vel): vels.append(ord(i))
         a[168:168+4] = vels
 
+        #prf
+        prfs = []
+        for i in pack('h',self.prf): prfs.append(ord(i))
+        a[184:184+2] = prfs
 
         #send bundle off
         cc = 0
@@ -174,12 +178,15 @@ class SIUI():
             out[k] = self.convert(k,d)
             if len(out[k]) == 1: out[k] = out[k][0]
         out['x'] = linspace(0,out['range'],len(out['wave']))
+        
+        #bit manip
         rsets = d[80:84]
         out['sets'] =[]
         for s in rsets:
             for i in range(8): 
                 out['sets'].append((s >> i) & 1)
         
+        out['gain'] = out['gain']/10.
         #get mode
         if out['sets'][16] == 0: out['mode'] = 'PE'
         else: out['mode'] = 'TR'
@@ -247,36 +254,45 @@ class SIUI():
             temp += chr(int(i))
         return fromstring(temp,dtype=self.dec[k]['type'])
 
+    
+    def setGetCheck(self):
+        self.setGain()
+        time.sleep(.2)
+        self.setParams()
+        set1 = [1]
+        set2 = [2]
+        while set1 != set2:        
+            self.setGain()
+            time.sleep(.2)
+            self.setParams()
+            time.sleep(.8)
+            a = self.getData()
+            set1 = [self.gain,self.mode,self.rng  ,self.freq,self.vset,self.rect]
+            set2 = [a['gain'],a['mode'],a['range'],a['freq'],a['volt'],a['rect']]
+        return a
 
 if __name__ == "__main__":
     from pithy import *
     site = 'http://j216-hacker-mini.local:9600'
     s = SIUI(site)
 
-    s.gain = 36.5
-    s.setGain()
-    time.sleep(1)
 
     #specify parameters
     s.vset = 200
-    s.rng = 10
+    s.gain = 30
+    s.rng = 5
     s.rect = 'rf'
-    s.setParams()
-    time.sleep(1)
+    s.freq = '2.5MHz'
+    s.prf = 800
 
-    data = s.getData()
-    
-    for d in data.keys():
-        try: ['x','wave'].index(d)
-        except: print d,data[d]
-    
-    plot(data['x'],data['wave'])
+    data = s.setGetCheck()
+    print data['prf']
+    plot(data['x'],data['wave'],label=s.freq)
     
     xlabel('range (mm)')
+    legend()
     showme()
     clf()
     
-    
-    
-    
+ 
     
