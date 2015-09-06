@@ -1,9 +1,9 @@
 ##Overview
 
-This is a simple server that allows generalized control of the SIUI CTS9009 via a websever.  The program can also intercept the connection between the PC software and 9009 box.  Nodejs is required.
+This is a simple server that allows generalized control of the SIUI CTS9009 via a websever.  The program can also intercept the connection between the PC software and 9009 box.  Nodejs is required, and python is used for the final data parsing.
 
 ##Installing
-Assuming you have nodejs, all that is required is in this repository.  
+Assuming you have nodejs, all that is required is in this repository.  We are using [express](http://expressjs.com/) and bodyparser, but I've already included that for you.
 
 ##Running
 
@@ -33,7 +33,7 @@ returns the last full data stream from the SIUI.  Analysis of what this data mea
 
 where f.f is some float for the db setting.
 
-###Send Command
+###Send Predefined ommand
 `http://SERVERADDY:PORT/sendCmd/cmd_name`
 
 will run a predefine command set into the SIUI.  How do get command sets?
@@ -44,5 +44,16 @@ The SIUI CTS software sends a batch of parameters (outside of gains and freezes)
 `temp_1440698432627.scmd` 
 
 simply rename the commands (leaving the `.scmd` extension) and then run your new name as the `cmd_name` in the above step.  Once you capture the parameter values you want you no longer have to run the windows software.  
+
+###Edit commands on fly
+
+IF you use the included libSIUI.py library you can craft commands and settings on the fly.  Currently you can control
+
+- TR/PE mode 
+- Gain
+- Pulse Width (in ns) (see https://github.com/dansteingart/serveSIUI/issues/2 for a rub)
+- Frequency Range
+- Filter settings
+- ToF
 
 You're welcome.
