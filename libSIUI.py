@@ -175,6 +175,8 @@ class SIUI():
     def processData(self,d):
         out = {}
 
+        out['raw'] = d
+
         #do what we can automagically
         for k in self.dec.keys():
             out[k] = self.convert(k,d)
@@ -187,6 +189,8 @@ class SIUI():
         for s in rsets:
             for i in range(8): 
                 out['sets'].append((s >> i) & 1)
+        
+        
         
         out['gain'] = out['gain']/10.
         #get mode
