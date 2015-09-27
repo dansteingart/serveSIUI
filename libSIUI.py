@@ -14,7 +14,9 @@ class SIUI():
         self.dec['prf']   = {'start':184,'bytes': 2,'type':int16} #SIUI was wrong here
         self.dec['delay'] = {'start': 44,'bytes': 4,'type':float32}
         self.dec['vel']   = {'start':168,'bytes': 4,'type':float32}
-        self.dec['wave']  = {'start':400,'bytes':800,'type':uint16}
+        self.dec['wave']    = {'start':400,'bytes':800,'type':uint8}
+        self.dec['wave8']   = {'start':400,'bytes':800,'type':uint8}
+        self.dec['wave16']  = {'start':400,'bytes':800,'type':uint16}
         self.base = self.getBaseline()
         self.gbase = self.getGainBaseline()
         self.rects = ['pos','neg','full','filter','rf']
