@@ -14,9 +14,7 @@ class SIUI():
         self.dec['prf']   = {'start':184,'bytes': 2,'type':int16} #SIUI was wrong here
         self.dec['delay'] = {'start': 44,'bytes': 4,'type':float32}
         self.dec['vel']   = {'start':168,'bytes': 4,'type':float32}
-        self.dec['wave']    = {'start':400,'bytes':800,'type':uint8}
-        self.dec['wave8']   = {'start':400,'bytes':800,'type':uint8}
-        self.dec['wave16']  = {'start':400,'bytes':800,'type':uint16}
+        self.dec['wave']  = {'start':400,'bytes':800,'type':uint16}
         self.base = self.getBaseline()
         self.gbase = self.getGainBaseline()
         self.rects = ['pos','neg','full','filter','rf']
@@ -26,7 +24,7 @@ class SIUI():
         self.vset=50
         self.rng=30.0
         self.mode='PE'
-        self.vel=5250
+        self.vel=2450
         self.pw = 200
         self.prf = 200
         self.damp = 0
@@ -155,7 +153,17 @@ class SIUI():
         #vel
         vels = []
         for i in pack('f',self.vel): vels.append(ord(i))
+        print self.vel
+        print vels
         a[168:168+4] = vels
+        
+
+        vels = []
+        for i in pack('h',self.vel): vels.append(ord(i))
+        print self.vel
+        print vels
+        a[56:56+2] = vels
+
 
         #prf
         prfs = []
@@ -175,8 +183,6 @@ class SIUI():
     def processData(self,d):
         out = {}
 
-        out['raw'] = d
-
         #do what we can automagically
         for k in self.dec.keys():
             out[k] = self.convert(k,d)
@@ -189,8 +195,6 @@ class SIUI():
         for s in rsets:
             for i in range(8): 
                 out['sets'].append((s >> i) & 1)
-        
-        
         
         out['gain'] = out['gain']/10.
         #get mode
@@ -258,6 +262,7 @@ class SIUI():
         l = self.dec[k]['bytes']
         for i in arr[s:s+l]:
             temp += chr(int(i))
+            if k == "vel": print int(i),
         return fromstring(temp,dtype=self.dec[k]['type'])
 
     
@@ -279,23 +284,49 @@ class SIUI():
 
 if __name__ == "__main__":
     from pithy import *
-    site = 'http://j216-hacker-mini.local:9600'
+    site = 'http://localhost:9600'
     s = SIUI(site)
-
-
+    
+    # fils = glob("/Users/lab/serveSIUI/*.scmd")
+    # fils = sorted(fils,key = lambda k: os.path.getmtime(k))
+    # fils.reverse()
+    # #for f in fils: print f
+    # print fils[0]
+    # for i in [0,1,2,3,4]:
+    #     stuff = open(fils[i]).read()
+    #     data = json.loads(stuff)
+    #     #data = [item for sublist in data for item in sublist]
+    #     subplot(2,1,1)
+    #     plot(data[0],'.')
+    #     temp = chr(data[0][56])+chr(data[0][57])
+    #     print data[0][56],data[0][57],fromstring(temp,dtype=uint16)
+    #     subplot(2,1,2)
+    #     plot(data[0],'.')
+    # subplot(2,1,1)
+    # xlim([50,60])
+    # subplot(2,1,2)
+    # xlim([150,200])
+    # showme()
+    # clf()
+    
     #specify parameters
     s.vset = 200
-    s.gain = 30
-    s.rng = 5
-    s.rect = 'rf'
+    s.gain = 25
+    s.rng = 100
+    s.pw = 444 
+    s.rect = 'filter'
     s.freq = '2.5MHz'
-    s.prf = 800
-
+    s.prf = 100
+    #s.mode = 'TR'
+    s.vel = 1000
     data = s.setGetCheck()
-    print data['prf']
-    plot(data['x'],data['wave'],label=s.freq)
-    
+    #data = s.getData()
+    print data['vel']
+    #data = s.getData()
+    plot(data['x'],data['wave'],label=s.pw)
+
     xlabel('range (mm)')
+    #ylim([0,65600])
     legend()
     showme()
     clf()
