@@ -14,6 +14,7 @@ class SIUI():
         self.dec['prf']   = {'start':184,'bytes': 2,'type':int16} #SIUI was wrong here
         self.dec['delay'] = {'start': 44,'bytes': 4,'type':float32}
         self.dec['vel']   = {'start':168,'bytes': 4,'type':float32}
+        self.dec['vel2']  = {'start': 56,'bytes': 2,'type':uint16 }
         self.dec['wave']  = {'start':400,'bytes':800,'type':uint16}
         self.base = self.getBaseline()
         self.gbase = self.getGainBaseline()
@@ -318,10 +319,10 @@ if __name__ == "__main__":
     s.freq = '2.5MHz'
     s.prf = 100
     #s.mode = 'TR'
-    s.vel = 1000
+    s.vel = 4000
     data = s.setGetCheck()
     #data = s.getData()
-    print data['vel']
+    print data['vel'],data['vel2']
     #data = s.getData()
     plot(data['x'],data['wave'],label=s.pw)
 
